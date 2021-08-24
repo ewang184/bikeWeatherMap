@@ -206,20 +206,14 @@ public class MapsActivity extends AppCompatActivity implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        String date = data.getStringExtra("date");
+
         String location = data.getStringExtra("location");
-        String time = data.getStringExtra("time");
+        String minahead = data.getStringExtra("time");
         String radius = data.getStringExtra("radius");
 
-        String[] timeSplit = time.split(":",2);
-        String[] dateSplit = date.split("/", 3);
         String[] placeSplit = location.split("/", 2);
         int area = Integer.parseInt(radius);
-        int hour = Integer.parseInt(timeSplit[0]);
-        int minute = Integer.parseInt(timeSplit[1]);
-        int year = Integer.parseInt(dateSplit[0]);
-        int month = Integer.parseInt(dateSplit[1]);
-        int day = Integer.parseInt(dateSplit[2]);
+        int foreMin = Integer.parseInt(minahead);
         double latitude = Double.parseDouble(placeSplit[0]);
         double longitude = Double.parseDouble(placeSplit[1]);
         // convert time format
@@ -230,36 +224,36 @@ public class MapsActivity extends AppCompatActivity implements
 
 
         // get and organize data for drawing circles
-        ArrayList<threehrforecast> grabpoints = new ArrayList<threehrforecast>();
+        //ArrayList<threehrforecast> grabpoints = new ArrayList<threehrforecast>();
         for(int i =0;i<thepoints.size();i++){
             double lat = thepoints.get(i).latitude;
             double lon = thepoints.get(i).longitude;
-            String weatherurl = "https://api.openweathermap.org/data/2.5/onecall?lat="+lat+"&lon="+lon+"&exclude=current,hourly,daily&appid=ced066415607aa1e214b187481c06567";
+            String weatherurl = "https://api.openweathermap.org/data/2.5/onecall?lat="+lat+"&lon="+lon+"&exclude=current,hourly,daily,alerts&appid=ced066415607aa1e214b187481c06567";
             getweather("unixt", weatherurl, new VolleyCallback() {
                 @Override
                 public void onSuccess(String result) {
                     Log.i("print initial json", result);
                     Gson g = new Gson();
                     threehrforecast minuterain = g.fromJson(result, threehrforecast.class);
-                    grabpoints.add(minuterain);
+
                     LatLng point = new LatLng(latitude,longitude);
                     if(minuterain.minutely!=null){
-                        LinkedTreeMap<String, Object> testing = (LinkedTreeMap<String, Object>)minuterain.minutely[0];
+                        LinkedTreeMap<String, Object> testing = (LinkedTreeMap<String, Object>)minuterain.minutely[foreMin];
                         Log.i("try", testing.get("precipitation").toString());
                         int transparent = (int) Math.round((Double) testing.get("precipitation"));
-
+                        CircleOptions weathercircle = new CircleOptions()
+                                .center(point)
+                                .radius(area/10) // In meters
+                                .fillColor(argb(transparent,50, 149, 168))
+                                .strokeColor(argb(transparent,50, 149, 168));
+                        mMap.addCircle(weathercircle);
                     }
                     else{
                         Log.i("it was ","null");
                     }
                 }
             });
-/*CircleOptions weathercircle = new CircleOptions()
-                                .center(point)
-                                .radius(area/10) // In meters
-                                .fillColor(argb(transparent,50, 149, 168))
-                                .strokeColor(argb(transparent,50, 149, 168));
-                        mMap.addCircle(weathercircle);*/
+
 
 
         }
