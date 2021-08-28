@@ -96,7 +96,6 @@ public class MapsActivity extends AppCompatActivity implements
         // if route list is not empty draw a line
         if(!routepoints.isEmpty()){
             Polyline route = mMap.addPolyline(new PolylineOptions()
-                    .clickable(true)
                     .add(
                             routepoints.get(routepoints.size()-1),
                             latLng
@@ -105,7 +104,6 @@ public class MapsActivity extends AppCompatActivity implements
         }
 
         routepoints.add(latLng);
-        Log.i("routepoints", String.valueOf(routepoints));
 
     }
 
@@ -213,13 +211,13 @@ public class MapsActivity extends AppCompatActivity implements
             Log.i("span", String.valueOf(span));
             // get the points for drawing circles
             List<LatLng> thepoints = weatherpoints(center.latitude, center.longitude, span);
-            Log.i("weatherpoints",thepoints.toString());
             CircleOptions drawcircle = new CircleOptions()
                     .center(center)
                     .radius(span) // In meters
                     .fillColor(argb(100, 235, 0, 0))
                     .strokeColor(argb(100, 235, 0, 0));
             mMap.addCircle(drawcircle);
+
 
             // get and organize data for drawing circles
             for (int i = 0; i < thepoints.size(); i++) {
@@ -236,16 +234,19 @@ public class MapsActivity extends AppCompatActivity implements
                         if (minuterain.minutely != null) {
                             LinkedTreeMap<String, Object> testing = (LinkedTreeMap<String, Object>) minuterain.minutely[foreMin];
 
-                            int transparent = (int) Math.round((Double) testing.get("precipitation"));
-                            CircleOptions weathercircle = new CircleOptions()
+                            //int transparent = (int) Math.round((Double) testing.get("precipitation"));
+                            /*CircleOptions weathercircle = new CircleOptions()
                                     .center(point)
                                     .radius(span / 2.5) // In meters
                                     .fillColor(argb(transparent+10, 50, 149, 168))
                                     .strokeColor(argb(transparent+10, 50, 149, 168));
-                            mMap.addCircle(weathercircle);
-                            Log.i("Printed","circle");
+                            mMap.addCircle(weathercircle);*/
+                            mMap.addMarker(new MarkerOptions()
+                                    .position(point)
+                                    .title("Precipitation: "+String.valueOf(testing.get("precipitation")))
+                            );
                         } else {
-                            Log.i("it was ", "null");
+                            //Log.i("it was ", "null");
                         }
                     }
                 });
