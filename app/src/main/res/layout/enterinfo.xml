@@ -10,36 +10,6 @@ android:layout_height="match_parent"
 tools:context=".enterinfo">
 
 
-
-<EditText
-    android:id="@+id/location"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="24dp"
-    android:layout_marginTop="8dp"
-    android:layout_marginEnd="24dp"
-    android:imeOptions="actionDone"
-    android:inputType="text"
-    android:hint="Rough Location: latitude/longitude"
-    android:selectAllOnFocus="true"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/radius"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="24dp"
-        android:imeOptions="actionDone"
-        android:inputType="text"
-        android:hint="Approximate radius of trip in meters"
-        android:selectAllOnFocus="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/location" />
     <SeekBar
         android:id="@+id/simpleSeekBar"
         style="@style/Widget.AppCompat.SeekBar.Discrete"
@@ -49,7 +19,7 @@ tools:context=".enterinfo">
         android:progress="0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/radius"
+        app:layout_constraintTop_toTopOf="parent"
         />
     <TextView
         android:id="@+id/textview1"
@@ -70,11 +40,28 @@ tools:context=".enterinfo">
     android:layout_marginEnd="48dp"
     android:layout_marginBottom="64dp"
     android:enabled="true"
+    android:text="Submit"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/simpleSeekBar"
     app:layout_constraintVertical_bias="0.2" />
+    <Button
+        android:id="@+id/reset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginBottom="64dp"
+        android:enabled="true"
+        android:text="Clear map"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/login"
+        app:layout_constraintVertical_bias="0.2" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

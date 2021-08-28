@@ -12,11 +12,17 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.maps.model.LatLng;
+
+import java.util.List;
+
 public class enterinfo extends AppCompatActivity{
     // declare the button
     Button thebutton;
     SeekBar sBar;
     TextView tView;
+    Button resetButton;
+    List<LatLng> routepoints;
     // initialize
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,9 +30,13 @@ public class enterinfo extends AppCompatActivity{
         setContentView(R.layout.enterinfo);
         // map button to xml button
         thebutton = findViewById(R.id.login);
+        resetButton = findViewById(R.id.reset);
         sBar = (SeekBar) findViewById(R.id.simpleSeekBar);
         tView = (TextView) findViewById(R.id.textview1);
-        tView.setText("Forecast - minutes ahead");
+        tView.setText("Go back");
+        //Intent intent=getIntent();
+        //routepoints = intent.getParcelableArrayListExtra("routepoints");
+
         sBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             int pval = 0;
             @Override
@@ -47,42 +57,33 @@ public class enterinfo extends AppCompatActivity{
                 }
             }
         });
-
+        resetButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent previousScreen = new Intent(getApplicationContext(), MapsActivity.class);
+                setResult(3000, previousScreen);
+                finish();
+            }
+        });
         thebutton.setOnClickListener(new View.OnClickListener() {
             // on click event handler
             @Override
             public void onClick(View view) {
-                // read from xml editexts
+                if(tView.getText()!="Go back") {
+                    // read from xml
+                    int foreMin = sBar.getProgress();
 
-                EditText locStr = findViewById(R.id.location);
-                String place = locStr.getText().toString();
-                EditText radius = findViewById(R.id.radius);
-                String rad = radius.getText().toString();
-                int foreMin = sBar.getProgress();
-                Log.i("try bar", String.valueOf(foreMin));
-                // try/catch for input
-
-                String[] placeSplit = place.split("/", 2);
-                boolean pass = true;
-                try{
-                    int area = Integer.parseInt(rad);
-                    float latitude = Float.parseFloat(placeSplit[0]);
-                    float longitude = Float.parseFloat(placeSplit[1]);
-
-                } catch(Exception e) {
-                    pass = false;
-                }
-                if(pass) {
-                    // send back the intent to the map with date and location
+                    // send back the intent to the map with time
                     Intent previousScreen = new Intent(getApplicationContext(), MapsActivity.class);
-                    Log.i("try bar", String.valueOf(foreMin));
-                    previousScreen.putExtra("location", place);
-                    previousScreen.putExtra("radius", rad);
                     previousScreen.putExtra("time", String.valueOf(foreMin));
                     setResult(1000, previousScreen);
                     finish();
                 }
-
+                else{
+                    Intent previousScreen = new Intent(getApplicationContext(), MapsActivity.class);
+                    setResult(2000, previousScreen);
+                    finish();
+                }
             }
         });
     }
