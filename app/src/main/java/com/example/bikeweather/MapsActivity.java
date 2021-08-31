@@ -1,8 +1,12 @@
 package com.example.bikeweather;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -84,10 +88,8 @@ public class MapsActivity extends AppCompatActivity implements
 
     }
 
-    @Override
-    public void onInfoWindowClick(Marker marker) {
 
-    }
+
 
 
     @Override
@@ -113,6 +115,8 @@ public class MapsActivity extends AppCompatActivity implements
         Intent switchActivityIntent = new Intent(this, enterinfo.class);
         startActivityForResult(switchActivityIntent, 1000);
     }
+
+
     public double distanceFrom(double x1, double x2, double y1, double y2){
         double distx = x2-x1;
         double disty = y2-y1;
@@ -170,6 +174,11 @@ public class MapsActivity extends AppCompatActivity implements
         return thepoints;
     }
 
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+
+    }
+
     public interface VolleyCallback{
         void onSuccess(String result);
     }
@@ -209,13 +218,13 @@ public class MapsActivity extends AppCompatActivity implements
             int foreMin = Integer.parseInt(minahead);
             Log.i("center", String.valueOf(center));
             Log.i("span", String.valueOf(span));
-            // get the points for drawing circles
+            // get the points for drawing markers
             List<LatLng> thepoints = weatherpoints(center.latitude, center.longitude, span);
-            CircleOptions drawcircle = new CircleOptions()
+            CircleOptions drawcircle  = new CircleOptions()
                     .center(center)
                     .radius(span) // In meters
-                    .fillColor(argb(100, 235, 0, 0))
-                    .strokeColor(argb(100, 235, 0, 0));
+                    .fillColor(argb(100, 0, 0, 235))
+                    .strokeColor(argb(100, 0, 0, 235));
             mMap.addCircle(drawcircle);
 
 
@@ -234,19 +243,14 @@ public class MapsActivity extends AppCompatActivity implements
                         if (minuterain.minutely != null) {
                             LinkedTreeMap<String, Object> testing = (LinkedTreeMap<String, Object>) minuterain.minutely[foreMin];
 
-                            //int transparent = (int) Math.round((Double) testing.get("precipitation"));
-                            /*CircleOptions weathercircle = new CircleOptions()
-                                    .center(point)
-                                    .radius(span / 2.5) // In meters
-                                    .fillColor(argb(transparent+10, 50, 149, 168))
-                                    .strokeColor(argb(transparent+10, 50, 149, 168));
-                            mMap.addCircle(weathercircle);*/
-                            mMap.addMarker(new MarkerOptions()
-                                    .position(point)
-                                    .title("Precipitation: "+String.valueOf(testing.get("precipitation")))
-                            );
+                            double rainfall = (double) testing.get("precipitation");
+                            if (rainfall != 0.0) {
+                                mMap.addMarker(new MarkerOptions()
+                                        .position(point)
+                                        .title("Precipitation: " + String.valueOf(rainfall))
+                                );
+                            }
                         } else {
-                            //Log.i("it was ", "null");
                         }
                     }
                 });
