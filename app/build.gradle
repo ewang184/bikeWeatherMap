@@ -3,6 +3,20 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        debug {
+            keyAlias 'key0'
+            storePassword '#E4484j4y'
+            keyPassword '#E4484j4y'
+            storeFile file('/Users/ervinwang/Documents/Ervin/androidKeyPath/Untitled')
+        }
+        release {
+            storeFile file('/Users/ervinwang/Documents/Ervin/androidKeyPath/Untitled')
+            storePassword '#E4484j4y'
+            keyAlias 'key0'
+            keyPassword '#E4484j4y'
+        }
+    }
     compileSdkVersion 30
     buildToolsVersion "30.0.0"
 
@@ -20,6 +34,10 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            signingConfig signingConfigs.debug
         }
     }
     compileOptions {
