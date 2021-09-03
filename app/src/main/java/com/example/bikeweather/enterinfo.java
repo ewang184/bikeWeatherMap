@@ -33,9 +33,8 @@ public class enterinfo extends AppCompatActivity{
         resetButton = findViewById(R.id.reset);
         sBar = (SeekBar) findViewById(R.id.simpleSeekBar);
         tView = (TextView) findViewById(R.id.textview1);
-        tView.setText("Go back");
-        //Intent intent=getIntent();
-        //routepoints = intent.getParcelableArrayListExtra("routepoints");
+        tView.setText("-");
+        thebutton.setText("Go back");
 
         sBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             int pval = 0;
@@ -55,6 +54,7 @@ public class enterinfo extends AppCompatActivity{
                 else{
                     tView.setText("Forecast " + pval + " minutes ahead");
                 }
+                thebutton.setText("Begin forecast");
             }
         });
         resetButton.setOnClickListener(new View.OnClickListener(){
@@ -69,7 +69,7 @@ public class enterinfo extends AppCompatActivity{
             // on click event handler
             @Override
             public void onClick(View view) {
-                if(tView.getText()!="Go back") {
+                if(tView.getText()!="-") {
                     // read from xml
                     int foreMin = sBar.getProgress();
 
